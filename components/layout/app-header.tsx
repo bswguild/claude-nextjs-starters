@@ -22,6 +22,7 @@ const segmentLabels: Record<string, string> = {
   dashboard: "대시보드",
   settings: "설정",
   users: "사용자관리",
+  analytics: "통계",
 }
 
 // 대시보드 상단바: 사이드바 토글 + 브레드크럼 + 테마/사용자 메뉴

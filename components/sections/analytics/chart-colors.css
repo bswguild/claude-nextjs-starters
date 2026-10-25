@@ -1,0 +1,14 @@
+/* 통계 차트 전용 카테고리 색상 (dataviz 스킬 검증 팔레트, 처음 4개 슬롯) */
+.viz-charts {
+  --viz-series-1: #2a78d6; /* blue */
+  --viz-series-2: #eb6834; /* orange */
+  --viz-series-3: #1baf7a; /* aqua */
+  --viz-series-4: #eda100; /* yellow */
+}
+
+.dark .viz-charts {
+  --viz-series-1: #3987e5;
+  --viz-series-2: #d95926;
+  --viz-series-3: #199e70;
+  --viz-series-4: #c98500;
+}

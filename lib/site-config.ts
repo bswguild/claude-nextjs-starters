@@ -1,4 +1,4 @@
-import { Home, LayoutDashboard, Settings } from "lucide-react"
+import { Home, LayoutDashboard, Settings, Users } from "lucide-react"
 
 import type { NavItem } from "@/types/nav"
 
@@ -19,6 +19,7 @@ export const mainNav: NavItem[] = [
 // 대시보드 사이드바 내비게이션
 export const dashboardNav: NavItem[] = [
   { title: "개요", href: "/dashboard", icon: LayoutDashboard },
+  { title: "사용자관리", href: "/dashboard/users", icon: Users },
   { title: "설정", href: "/dashboard/settings", icon: Settings },
 ]
 

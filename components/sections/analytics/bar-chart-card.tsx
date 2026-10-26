@@ -1,3 +1,5 @@
+import "./chart-colors.css"
+
 import {
   Card,
   CardContent,
@@ -5,6 +7,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { ChartGridLines } from "@/components/sections/analytics/chart-grid-lines"
+import { createLinearScale } from "@/components/sections/analytics/chart-scale"
 
 // 단일 시리즈 비교 차트 — 막대 끝에 값 직접 표기
 const categories = ["검색", "소셜", "추천", "직접"]
@@ -14,16 +18,12 @@ const WIDTH = 300
 const HEIGHT = 160
 const PAD_LEFT = 26
 const PAD_RIGHT = 12
+const PAD_TOP = 14
 const BASELINE_Y = 124
-const MAX_VALUE = 160
-const GRID_STEPS = [0, 40, 80, 120, 160]
+const STEP_UNIT = 40
 const BAR_WIDTH = 22
 
-function toY(value: number) {
-  const plotTop = 14
-  const plotHeight = BASELINE_Y - plotTop
-  return BASELINE_Y - (plotHeight * value) / MAX_VALUE
-}
+const { gridSteps, toY } = createLinearScale(values, STEP_UNIT, PAD_TOP, BASELINE_Y)
 
 export function BarChartCard() {
   const plotWidth = WIDTH - PAD_LEFT - PAD_RIGHT
@@ -44,17 +44,13 @@ export function BarChartCard() {
             .map((category, index) => `${category} ${values[index]}명`)
             .join(", ")}`}
         >
-          {GRID_STEPS.map((step) => (
-            <line
-              key={step}
-              x1={PAD_LEFT}
-              x2={WIDTH - PAD_RIGHT}
-              y1={toY(step)}
-              y2={toY(step)}
-              style={{ stroke: "var(--border)" }}
-              strokeWidth={1}
-            />
-          ))}
+          <ChartGridLines
+            steps={gridSteps}
+            toY={toY}
+            width={WIDTH}
+            padLeft={PAD_LEFT}
+            padRight={PAD_RIGHT}
+          />
 
           {categories.map((category, index) => {
             const value = values[index]

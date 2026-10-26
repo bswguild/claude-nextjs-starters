@@ -1,3 +1,5 @@
+import "./chart-colors.css"
+
 import {
   Card,
   CardContent,
@@ -29,6 +31,8 @@ const arcs = segments.reduce<
   return [...acc, { ...segment, arcLength, offset: cumulative }]
 }, [])
 
+const totalPercent = segments.reduce((sum, segment) => sum + segment.percent, 0)
+
 export function DonutChartCard() {
   return (
     <Card className="viz-charts">
@@ -55,7 +59,7 @@ export function DonutChartCard() {
                 fill="none"
                 style={{ stroke: segment.color }}
                 strokeWidth={STROKE_WIDTH}
-                strokeDasharray={`${segment.arcLength} ${CIRCUMFERENCE}`}
+                strokeDasharray={`${segment.arcLength} ${CIRCUMFERENCE - segment.arcLength}`}
                 strokeDashoffset={-segment.offset}
               >
                 <title>{`${segment.label}: ${segment.percent}%`}</title>
@@ -71,7 +75,7 @@ export function DonutChartCard() {
             fontWeight={600}
             style={{ fill: "var(--foreground)" }}
           >
-            100%
+            {totalPercent}%
           </text>
         </svg>
 

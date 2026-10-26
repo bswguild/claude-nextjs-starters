@@ -1,5 +1,3 @@
-import "./chart-colors.css"
-
 import { AreaChartCard } from "@/components/sections/analytics/area-chart-card"
 import { BarChartCard } from "@/components/sections/analytics/bar-chart-card"
 import { DonutChartCard } from "@/components/sections/analytics/donut-chart-card"

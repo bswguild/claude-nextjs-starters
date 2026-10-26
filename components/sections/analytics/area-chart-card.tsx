@@ -1,3 +1,5 @@
+import "./chart-colors.css"
+
 import {
   Card,
   CardContent,
@@ -5,6 +7,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import { ChartGridLines } from "@/components/sections/analytics/chart-grid-lines"
+import { createLinearScale, createXScale } from "@/components/sections/analytics/chart-scale"
 
 // 단일 시리즈 누적 추이 차트 — 선 아래 10% 투명도 영역 채우기
 const days = ["월", "화", "수", "목", "금", "토", "일"]
@@ -16,18 +20,10 @@ const PAD_LEFT = 26
 const PAD_RIGHT = 12
 const PAD_TOP = 14
 const BASELINE_Y = 124
-const MAX_VALUE = 240
-const GRID_STEPS = [0, 60, 120, 180, 240]
+const STEP_UNIT = 60
 
-function toX(index: number) {
-  const plotWidth = WIDTH - PAD_LEFT - PAD_RIGHT
-  return PAD_LEFT + (plotWidth * index) / (days.length - 1)
-}
-
-function toY(value: number) {
-  const plotHeight = BASELINE_Y - PAD_TOP
-  return BASELINE_Y - (plotHeight * value) / MAX_VALUE
-}
+const { gridSteps, toY } = createLinearScale(values, STEP_UNIT, PAD_TOP, BASELINE_Y)
+const toX = createXScale(days.length, WIDTH, PAD_LEFT, PAD_RIGHT)
 
 export function AreaChartCard() {
   const points = values.map((value, index) => ({
@@ -57,17 +53,13 @@ export function AreaChartCard() {
             .map((day, index) => `${day} ${values[index]}회`)
             .join(", ")}`}
         >
-          {GRID_STEPS.map((step) => (
-            <line
-              key={step}
-              x1={PAD_LEFT}
-              x2={WIDTH - PAD_RIGHT}
-              y1={toY(step)}
-              y2={toY(step)}
-              style={{ stroke: "var(--border)" }}
-              strokeWidth={1}
-            />
-          ))}
+          <ChartGridLines
+            steps={gridSteps}
+            toY={toY}
+            width={WIDTH}
+            padLeft={PAD_LEFT}
+            padRight={PAD_RIGHT}
+          />
 
           <path d={areaPath} style={{ fill: "var(--viz-series-1)" }} opacity={0.1} />
 

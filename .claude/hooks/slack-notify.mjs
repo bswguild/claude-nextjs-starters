@@ -12,20 +12,31 @@ function readStdin() {
   }
 }
 
+function formatKoreanTimestamp(date) {
+  const pad = (value) => String(value).padStart(2, "0")
+  return `${date.getFullYear()}년 ${pad(date.getMonth() + 1)}월 ${pad(date.getDate())}일 ${pad(date.getHours())}시 ${pad(date.getMinutes())}분 ${pad(date.getSeconds())}초`
+}
+
 function buildMessage(payload) {
   const projectDir = payload.cwd ?? process.cwd()
   const projectName = projectDir.split(/[\\/]/).filter(Boolean).pop() ?? projectDir
+  const eventName = payload.hook_event_name ?? "알 수 없음"
 
-  if (payload.hook_event_name === "Notification") {
-    const detail = payload.message ? `\n> ${payload.message}` : ""
-    return `🔔 *Claude Code*가 승인을 기다리고 있어요 — \`${projectName}\`${detail}`
-  }
+  const header =
+    eventName === "Notification"
+      ? "🔔 권한 요청"
+      : eventName === "Stop"
+        ? "✅ 작업 완료 알림"
+        : `ℹ️ ${eventName}`
 
-  if (payload.hook_event_name === "Stop") {
-    return `✅ *Claude Code* 작업이 완료됐어요 — \`${projectName}\``
-  }
+  const status = eventName === "Notification" && payload.message ? payload.message : eventName
 
-  return `ℹ️ Claude Code 이벤트: ${payload.hook_event_name ?? "알 수 없음"} — \`${projectName}\``
+  return [
+    header,
+    `프로젝트 : ${projectName}`,
+    `상태 : ${status}`,
+    `시간 : ${formatKoreanTimestamp(new Date())}`,
+  ].join("\n")
 }
 
 async function main() {

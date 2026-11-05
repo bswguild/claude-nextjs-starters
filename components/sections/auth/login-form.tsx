@@ -10,12 +10,12 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
 import {
   Field,
+  FieldDescription,
   FieldError,
   FieldGroup,
   FieldLabel,
@@ -23,7 +23,6 @@ import {
 import { Input } from "@/components/ui/input"
 import { loginSchema, type LoginValues } from "@/lib/validations/auth"
 
-// 로그인 폼 (React Hook Form + Zod) — 서버 연동은 onSubmit에서 구현하세요
 export function LoginForm() {
   const form = useForm<LoginValues>({
     resolver: zodResolver(loginSchema),
@@ -40,10 +39,12 @@ export function LoginForm() {
     <Card className="w-full max-w-sm">
       <CardHeader>
         <CardTitle>로그인</CardTitle>
-        <CardDescription>이메일과 비밀번호를 입력하세요.</CardDescription>
+        <CardDescription>
+          이메일과 비밀번호를 입력해 계정에 로그인하세요.
+        </CardDescription>
       </CardHeader>
-      <form onSubmit={form.handleSubmit(onSubmit)} noValidate>
-        <CardContent>
+      <CardContent>
+        <form onSubmit={form.handleSubmit(onSubmit)} noValidate>
           <FieldGroup>
             <Controller
               name="email"
@@ -80,24 +81,17 @@ export function LoginForm() {
                 </Field>
               )}
             />
+            <Field>
+              <Button type="submit" disabled={form.formState.isSubmitting}>
+                {form.formState.isSubmitting ? "처리 중..." : "로그인"}
+              </Button>
+              <FieldDescription className="text-center">
+                계정이 없으신가요? <Link href="/signup">회원가입</Link>
+              </FieldDescription>
+            </Field>
           </FieldGroup>
-        </CardContent>
-        <CardFooter className="mt-6 flex-col gap-3">
-          <Button
-            type="submit"
-            className="w-full"
-            disabled={form.formState.isSubmitting}
-          >
-            {form.formState.isSubmitting ? "처리 중..." : "로그인"}
-          </Button>
-          <p className="text-sm text-muted-foreground">
-            계정이 없으신가요?{" "}
-            <Link href="/signup" className="text-foreground underline">
-              회원가입
-            </Link>
-          </p>
-        </CardFooter>
-      </form>
+        </form>
+      </CardContent>
     </Card>
   )
 }

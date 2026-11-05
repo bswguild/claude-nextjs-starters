@@ -6,8 +6,6 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Next.js 16 (App Router) + TypeScript + Tailwind CSS v4 + shadcn/ui(`base-nova`, Base UI 기반) + lucide-react로 구성된 웹 스타터킷. 레이아웃, 다크 모드, 폼 검증, 토스트가 미리 갖춰져 있다.
 
-> `next.config.ts`에서 `experimental.agentFeedback: true`가 켜져 있어 `next dev`가 `AGENTS.md`를 자동으로 재생성한다. `AGENTS.md`의 지시(이 Next.js 버전은 학습 데이터와 다른 breaking change가 있으므로 코드 작성 전 `node_modules/next/dist/docs/`의 해당 가이드를 먼저 읽을 것)를 반드시 따른다.
-
 ## 명령어
 
 ```bash
@@ -50,6 +48,14 @@ components/
 ### cacheComponents 제약
 
 `next.config.ts`에 `cacheComponents: true`가 켜져 있어, 프리렌더 중 `new Date()`, `cookies()` 같은 동적 값을 컴포넌트에서 바로 사용할 수 없다. 이런 값이 필요하면 `"use cache"` 지시어를 쓰거나(예: `components/layout/copyright.tsx`) Suspense 경계로 분리해야 한다.
+
+### 다크모드
+
+`next-themes`의 `class` 전략을 사용한다(`components/providers/index.tsx`의 `ThemeProvider attribute="class"`). 다크모드 관련 스타일은 Tailwind의 `dark:` variant로 대응한다.
+
+### 없는 것들
+
+이 스타터킷에는 미들웨어(`middleware.ts`), API 라우트(`app/**/route.ts`), `.env*` 파일이 없다. 유일한 환경변수는 `lib/site-config.ts`의 `NEXT_PUBLIC_SITE_URL`뿐이다. 새 기능을 설계할 때 이런 것이 이미 있다고 가정하지 않는다. `error.tsx`, `not-found.tsx`, `app/dashboard/loading.tsx` 등 App Router 표준 특수 파일은 이미 존재하므로 중복 생성하지 않는다.
 
 ### shadcn/ui: Base UI 기반 (`render` prop)
 
